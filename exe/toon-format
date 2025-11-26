@@ -1,0 +1,155 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "toon_format"
+require "optparse"
+require "json"
+
+module ToonFormat
+  # Command-line interface for TOON format conversion
+  class CLI
+    def initialize(args)
+      @args = args
+      @options = {
+        strict: true,
+        delimiter: ",",
+        indent: 2,
+        length_marker: true
+      }
+    end
+
+    def run
+      command = @args.shift
+
+      case command
+      when "encode"
+        encode_command
+      when "decode"
+        decode_command
+      when "stats"
+        stats_command
+      when nil, "--help", "-h"
+        print_help
+      else
+        puts "Unknown command: #{command}"
+        print_help
+        exit 1
+      end
+    rescue StandardError => e
+      puts "Error: #{e.message}"
+      exit 1
+    end
+
+    private
+
+    def parse_options!
+      OptionParser.new do |opts|
+        opts.banner = "Usage: toon-format <command> [options] [file]"
+
+        opts.on("-o", "--output FILE", "Write output to file") do |file|
+          @options[:output] = file
+        end
+
+        opts.on("--no-strict", "Disable strict validation (decode only)") do
+          @options[:strict] = false
+        end
+
+        opts.on("--delimiter CHAR", "Custom field delimiter (encode only)") do |char|
+          @options[:delimiter] = char
+        end
+
+        opts.on("--indent N", Integer, "Indentation spaces (encode only)") do |n|
+          @options[:indent] = n
+        end
+
+        opts.on("--no-length-marker", "Disable length markers (encode only)") do
+          @options[:length_marker] = false
+        end
+
+        opts.on("-h", "--help", "Show this help") do
+          puts opts
+          exit
+        end
+      end.parse!(@args)
+    end
+
+    def encode_command
+      parse_options!
+      input = read_input(@args.first)
+      data = JSON.parse(input)
+
+      output = ToonFormat.encode(data,
+                                 delimiter: @options[:delimiter],
+                                 indent: @options[:indent],
+                                 length_marker: @options[:length_marker])
+
+      write_output(output)
+    end
+
+    def decode_command
+      parse_options!
+      input = read_input(@args.first)
+
+      data = ToonFormat.decode(input, strict: @options[:strict])
+      output = JSON.pretty_generate(data)
+
+      write_output(output)
+    end
+
+    def stats_command
+      parse_options!
+      input = read_input(@args.first)
+      data = JSON.parse(input)
+
+      stats = ToonFormat.estimate_savings(data)
+
+      puts "JSON:  #{stats[:json_tokens]} tokens (#{stats[:json_size]} bytes)"
+      puts "TOON:  #{stats[:toon_tokens]} tokens (#{stats[:toon_size]} bytes)"
+      puts "Savings: #{stats[:savings_percent]}% tokens"
+    end
+
+    def read_input(file_path)
+      if file_path
+        File.read(file_path)
+      else
+        $stdin.read
+      end
+    end
+
+    def write_output(output)
+      if @options[:output]
+        File.write(@options[:output], output)
+      else
+        puts output
+      end
+    end
+
+    def print_help
+      puts <<~HELP
+        Usage: toon-format <command> [options] [file]
+
+        Commands:
+          encode    Convert JSON to TOON format
+          decode    Convert TOON to JSON format
+          stats     Show token savings comparison
+
+        Options:
+          -o, --output FILE        Write output to file
+          --no-strict              Disable strict validation (decode only)
+          --delimiter CHAR         Custom field delimiter (encode only)
+          --indent N               Indentation spaces (encode only)
+          --no-length-marker       Disable length markers (encode only)
+          -h, --help               Show this help
+
+        Examples:
+          toon-format encode data.json > data.toon
+          toon-format decode data.toon > data.json
+          toon-format stats data.json
+          cat data.json | toon-format encode
+      HELP
+    end
+  end
+end
+
+# Run CLI
+ToonFormat::CLI.new(ARGV).run
