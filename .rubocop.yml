@@ -33,6 +33,9 @@ Metrics/PerceivedComplexity:
 Lint/UselessConstantScoping:
   Enabled: false
 
+Gemspec/RequireMFA:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
   Exclude:
