@@ -14,6 +14,3 @@ gem "simplecov", "~> 0.22"
 gem "rubocop", "~> 1.21"
 
 gem "benchmark-ips", "~> 2.10"
-
-# Pin erb to version compatible with Ruby 3.1+
-gem "erb", "< 6.0"
