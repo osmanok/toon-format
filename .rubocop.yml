@@ -49,3 +49,7 @@ Style/StringLiterals:
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
+
+Naming/FileName:
+  Exclude:
+    - 'lib/toon-format.rb'

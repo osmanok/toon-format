@@ -11,7 +11,7 @@ RSpec.describe "Railtie loading" do
       rails_dir = File.join(tmpdir, "rails")
       FileUtils.mkdir_p(rails_dir)
 
-      File.write(File.join(rails_dir, "railtie.rb"), <<~'RUBY')
+      File.write(File.join(rails_dir, "railtie.rb"), <<~RUBY)
         module ActiveSupport
           def self.on_load(*)
           end
