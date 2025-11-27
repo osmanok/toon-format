@@ -8,8 +8,8 @@ module ToonFormat
       #
       # @param options [Hash] Encoding options
       # @return [String] TOON formatted string
-      def to_toon(**options)
-        ToonFormat.encode(as_json, **options)
+      def to_toon(**)
+        ToonFormat.encode(as_json, **)
       end
     end
   end

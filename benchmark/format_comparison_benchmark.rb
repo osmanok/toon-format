@@ -19,7 +19,7 @@ end
 
 puts "=" * 80
 puts "Format Comparison Benchmark"
-puts "Comparing TOON with JSON, YAML#{MSGPACK_AVAILABLE ? ', and MessagePack' : ''}"
+puts "Comparing TOON with JSON, YAML#{", and MessagePack" if MSGPACK_AVAILABLE}"
 puts "=" * 80
 puts
 
@@ -155,7 +155,5 @@ puts "When to use each format:"
 puts "  • JSON:       Universal compatibility, well-established"
 puts "  • YAML:       Configuration files, human editing priority"
 puts "  • TOON:       LLM contexts, API responses, token optimization"
-if MSGPACK_AVAILABLE
-  puts "  • MessagePack: Maximum compression, binary protocols"
-end
+puts "  • MessagePack: Maximum compression, binary protocols" if MSGPACK_AVAILABLE
 puts "=" * 80

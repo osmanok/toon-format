@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.email = ["ookuyan@protel.com.tr"]
 
   spec.summary = "TOON format serialization for Ruby"
-  spec.description = "Compact serialization format optimized for LLM contexts with 30-60% token reduction compared to JSON"
+  spec.description = "Compact serialization format optimized for LLM contexts " \
+                     "with 30-60% token reduction compared to JSON"
   spec.homepage = "https://github.com/osmanok/toon-format"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
@@ -17,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/osmanokuyan/toon-format"
   spec.metadata["changelog_uri"] = "https://github.com/osmanokuyan/toon-format/blob/main/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

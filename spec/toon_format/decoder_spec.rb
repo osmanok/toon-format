@@ -10,7 +10,7 @@ RSpec.describe ToonFormat::Decoder do
     end
 
     it "validates input size" do
-      large_input = "x" * (10 * 1024 * 1024 + 1)
+      large_input = "x" * ((10 * 1024 * 1024) + 1)
 
       expect do
         described_class.decode(large_input)

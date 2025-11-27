@@ -24,18 +24,18 @@ puts
 
 # Test data sets with varying sizes
 data_sets = {
-  "Small (10 records)" => Array.new(10) { |i|
+  "Small (10 records)" => Array.new(10) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  },
-  "Medium (100 records)" => Array.new(100) { |i|
+  end,
+  "Medium (100 records)" => Array.new(100) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  },
-  "Large (1,000 records)" => Array.new(1000) { |i|
+  end,
+  "Large (1,000 records)" => Array.new(1000) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  },
-  "Very Large (10,000 records)" => Array.new(10_000) { |i|
+  end,
+  "Very Large (10,000 records)" => Array.new(10_000) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  }
+  end
 }
 
 data_sets.each do |name, data|
@@ -56,9 +56,9 @@ data_sets.each do |name, data|
   puts "TOON encoding (1000 iterations): #{toon_memory} KB"
 
   diff = json_memory - toon_memory
-  if diff > 0
+  if diff.positive?
     puts "Memory saved: #{diff} KB (#{((diff / json_memory.to_f) * 100).round(1)}%)"
-  elsif diff < 0
+  elsif diff.negative?
     puts "Memory overhead: #{diff.abs} KB (#{((diff.abs / json_memory.to_f) * 100).round(1)}%)"
   else
     puts "Memory usage: equivalent"
@@ -81,9 +81,9 @@ data_sets.each do |name, data|
   puts "TOON decoding (1000 iterations): #{toon_decode_memory} KB"
 
   diff = json_decode_memory - toon_decode_memory
-  if diff > 0
+  if diff.positive?
     puts "Memory saved: #{diff} KB (#{((diff / json_decode_memory.to_f) * 100).round(1)}%)"
-  elsif diff < 0
+  elsif diff.negative?
     puts "Memory overhead: #{diff.abs} KB (#{((diff.abs / json_decode_memory.to_f) * 100).round(1)}%)"
   else
     puts "Memory usage: equivalent"

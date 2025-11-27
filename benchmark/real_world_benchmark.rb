@@ -38,7 +38,7 @@ toon_response = ToonFormat.encode(api_users)
 puts "Response sizes:"
 puts "  JSON: #{json_response.bytesize} bytes (~#{(json_response.bytesize / 4.0).ceil} tokens)"
 puts "  TOON: #{toon_response.bytesize} bytes (~#{(toon_response.bytesize / 4.0).ceil} tokens)"
-puts "  Savings: #{((1 - toon_response.bytesize.to_f / json_response.bytesize) * 100).round(1)}%"
+puts "  Savings: #{((1 - (toon_response.bytesize.to_f / json_response.bytesize)) * 100).round(1)}%"
 puts
 
 Benchmark.ips do |x|
@@ -57,7 +57,7 @@ puts
 
 products = Array.new(200) do |i|
   {
-    sku: "PROD#{i.to_s.rjust(5, '0')}",
+    sku: "PROD#{i.to_s.rjust(5, "0")}",
     name: "Product #{i}",
     category: %w[Electronics Clothing Books Home].sample,
     price: (rand(10..1000) * 100) / 100.0,
@@ -74,7 +74,7 @@ toon_export = ToonFormat.encode(products)
 puts "Export sizes:"
 puts "  JSON: #{json_export.bytesize} bytes"
 puts "  TOON: #{toon_export.bytesize} bytes"
-puts "  Savings: #{((1 - toon_export.bytesize.to_f / json_export.bytesize) * 100).round(1)}%"
+puts "  Savings: #{((1 - (toon_export.bytesize.to_f / json_export.bytesize)) * 100).round(1)}%"
 puts
 
 Benchmark.ips do |x|
@@ -96,7 +96,7 @@ chat_history = Array.new(20) do |i|
     id: i + 1,
     role: i.even? ? "user" : "assistant",
     content: "This is message number #{i + 1} in the conversation. " * 3,
-    timestamp: "2025-01-26T#{(10 + i).to_s.rjust(2, '0')}:30:00Z",
+    timestamp: "2025-01-26T#{(10 + i).to_s.rjust(2, "0")}:30:00Z",
     tokens: rand(50..200)
   }
 end
@@ -145,7 +145,7 @@ toon_events = ToonFormat.encode(analytics_events)
 puts "Event log sizes:"
 puts "  JSON: #{json_events.bytesize} bytes"
 puts "  TOON: #{toon_events.bytesize} bytes"
-puts "  Savings: #{((1 - toon_events.bytesize.to_f / json_events.bytesize) * 100).round(1)}%"
+puts "  Savings: #{((1 - (toon_events.bytesize.to_f / json_events.bytesize)) * 100).round(1)}%"
 puts "  Bandwidth saved per 1000 requests: #{((json_events.bytesize - toon_events.bytesize) * 1000 / 1024.0).round(2)} KB"
 puts
 
@@ -201,7 +201,7 @@ toon_config = ToonFormat.encode(config)
 puts "Config sizes:"
 puts "  JSON (pretty): #{json_config.bytesize} bytes"
 puts "  TOON:          #{toon_config.bytesize} bytes"
-puts "  Savings: #{((1 - toon_config.bytesize.to_f / json_config.bytesize) * 100).round(1)}%"
+puts "  Savings: #{((1 - (toon_config.bytesize.to_f / json_config.bytesize)) * 100).round(1)}%"
 puts
 
 Benchmark.ips do |x|

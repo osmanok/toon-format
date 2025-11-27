@@ -1,5 +1,45 @@
 AllCops:
   TargetRubyVersion: 3.2
+  NewCops: enable
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'benchmark/**/*.rb'
+
+Metrics/MethodLength:
+  Max: 35
+  Exclude:
+    - 'benchmark/**/*.rb'
+
+Metrics/ClassLength:
+  Max: 250
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - 'benchmark/**/*.rb'
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+  Exclude:
+    - 'benchmark/**/*.rb'
+
+Metrics/PerceivedComplexity:
+  Max: 12
+  Exclude:
+    - 'benchmark/**/*.rb'
+
+Lint/UselessConstantScoping:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'benchmark/**/*.rb'
+
+Style/Documentation:
+  Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
