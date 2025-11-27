@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "English"
 require "tempfile"
 require "json"
 
@@ -10,7 +11,7 @@ RSpec.describe "CLI" do
   def run_cli(*args)
     cmd = "ruby -I #{lib_path} #{cli_path} #{args.join(" ")}"
     output = `#{cmd} 2>&1`
-    [output, $?.exitstatus]
+    [output, $CHILD_STATUS.exitstatus]
   end
 
   describe "help command" do

@@ -57,7 +57,7 @@ depths.each do |depth|
   puts "Nesting Depth: #{depth}"
   puts "-" * 80
   puts "JSON size: #{json_str.bytesize} bytes"
-  puts "TOON size: #{toon_str.bytesize} bytes (#{((1 - toon_str.bytesize.to_f / json_str.bytesize) * 100).round(1)}% difference)"
+  puts "TOON size: #{toon_str.bytesize} bytes (#{((1 - (toon_str.bytesize.to_f / json_str.bytesize)) * 100).round(1)}% difference)"
   puts
 
   Benchmark.ips do |x|
@@ -118,9 +118,9 @@ puts "=" * 80
 puts
 
 wide_structure = {
-  data: Array.new(100) { |i|
+  data: Array.new(100) do |i|
     { id: i, name: "Item#{i}", value: rand(100) }
-  }
+  end
 }
 
 deep_structure = create_nested_object(15)
@@ -130,7 +130,7 @@ puts "-" * 80
 json_wide = JSON.generate(wide_structure)
 toon_wide = ToonFormat.encode(wide_structure)
 puts "JSON: #{json_wide.bytesize} bytes"
-puts "TOON: #{toon_wide.bytesize} bytes (#{((1 - toon_wide.bytesize.to_f / json_wide.bytesize) * 100).round(1)}% difference)"
+puts "TOON: #{toon_wide.bytesize} bytes (#{((1 - (toon_wide.bytesize.to_f / json_wide.bytesize)) * 100).round(1)}% difference)"
 puts
 
 Benchmark.ips do |x|
@@ -166,21 +166,21 @@ puts "=" * 80
 puts
 
 complex_data = {
-  users: Array.new(20) { |i|
+  users: Array.new(20) do |i|
     {
       id: i,
       name: "User#{i}",
-      posts: Array.new(5) { |j|
+      posts: Array.new(5) do |j|
         {
           id: j,
           title: "Post #{j}",
-          comments: Array.new(3) { |k|
+          comments: Array.new(3) do |k|
             { id: k, text: "Comment #{k}", likes: rand(10) }
-          }
+          end
         }
-      }
+      end
     }
-  }
+  end
 }
 
 json_complex = JSON.generate(complex_data)
@@ -190,7 +190,7 @@ puts "20 users × 5 posts × 3 comments = 300 total items"
 puts "-" * 80
 puts "JSON size: #{json_complex.bytesize} bytes"
 puts "TOON size: #{toon_complex.bytesize} bytes"
-puts "Savings: #{((1 - toon_complex.bytesize.to_f / json_complex.bytesize) * 100).round(1)}%"
+puts "Savings: #{((1 - (toon_complex.bytesize.to_f / json_complex.bytesize)) * 100).round(1)}%"
 puts
 
 Benchmark.ips do |x|

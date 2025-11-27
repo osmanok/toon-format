@@ -21,29 +21,29 @@ datasets = {
     active: true
   },
 
-  "Small Array (10 records)" => Array.new(10) { |i|
+  "Small Array (10 records)" => Array.new(10) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com" }
-  },
+  end,
 
-  "Medium Array (100 records)" => Array.new(100) { |i|
+  "Medium Array (100 records)" => Array.new(100) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", score: rand(100) }
-  },
+  end,
 
-  "Large Array (1000 records)" => Array.new(1000) { |i|
+  "Large Array (1000 records)" => Array.new(1000) do |i|
     { id: i, name: "User#{i}", score: rand(100) }
-  },
+  end,
 
   "Complex Nested" => {
-    users: Array.new(20) { |i|
+    users: Array.new(20) do |i|
       {
         id: i,
         name: "User#{i}",
         profile: {
           age: 20 + i,
-          tags: ["tag1", "tag2"]
+          tags: %w[tag1 tag2]
         }
       }
-    },
+    end,
     metadata: { total: 20, page: 1 }
   }
 }
@@ -94,7 +94,7 @@ test_cases = [
     score: 95.5,
     active: true,
     metadata: nil,
-    tags: ["a", "b"],
+    tags: %w[a b],
     nested: { key: "value" }
   }]
 ]
@@ -102,7 +102,7 @@ test_cases = [
 test_cases.each do |name, data|
   # JSON round-trip
   json_encoded = JSON.generate(data)
-  json_decoded = JSON.parse(json_encoded, symbolize_names: true)
+  JSON.parse(json_encoded, symbolize_names: true)
 
   # TOON round-trip
   toon_encoded = ToonFormat.encode(data)
@@ -126,16 +126,16 @@ puts
 
 # Test data for multiple round-trips
 test_data = {
-  users: Array.new(50) { |i|
+  users: Array.new(50) do |i|
     { id: i, name: "User#{i}", score: rand(100), active: i.even? }
-  }
+  end
 }
 
 puts "Testing 10 consecutive round-trips..."
 puts "-" * 80
 
 current = test_data
-10.times do |i|
+10.times do |_i|
   encoded = ToonFormat.encode(current)
   current = ToonFormat.decode(encoded)
 end
@@ -154,9 +154,9 @@ puts "PERFORMANCE: Multiple Encode-Decode Cycles"
 puts "=" * 80
 puts
 
-data = Array.new(100) { |i|
+data = Array.new(100) do |i|
   { id: i, name: "User#{i}", email: "user#{i}@example.com" }
-}
+end
 
 puts "100 records, 5 round-trips each iteration:"
 puts "-" * 80

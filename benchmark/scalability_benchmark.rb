@@ -64,7 +64,7 @@ sizes.each do |size|
 
   puts "\nDataset: #{size} records"
   puts "  JSON size: #{json_str.bytesize} bytes"
-  puts "  TOON size: #{toon_str.bytesize} bytes (#{((1 - toon_str.bytesize.to_f / json_str.bytesize) * 100).round(1)}% smaller)"
+  puts "  TOON size: #{toon_str.bytesize} bytes (#{((1 - (toon_str.bytesize.to_f / json_str.bytesize)) * 100).round(1)}% smaller)"
   puts "-" * 80
 
   Benchmark.ips do |x|
@@ -103,7 +103,7 @@ results = {}
 
   json_str = JSON.generate(data)
   toon_str = ToonFormat.encode(data)
-  size_reduction = ((1 - toon_str.bytesize.to_f / json_str.bytesize) * 100).round(1)
+  size_reduction = ((1 - (toon_str.bytesize.to_f / json_str.bytesize)) * 100).round(1)
 
   results[size] = {
     speedup: speedup,

@@ -14,27 +14,27 @@ puts
 
 # Test datasets
 datasets = {
-  "Small (10 records)" => Array.new(10) { |i|
+  "Small (10 records)" => Array.new(10) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  },
+  end,
 
-  "Medium (100 records)" => Array.new(100) { |i|
+  "Medium (100 records)" => Array.new(100) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  },
+  end,
 
-  "Large (1000 records)" => Array.new(1000) { |i|
+  "Large (1000 records)" => Array.new(1000) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", active: i.even? }
-  },
+  end,
 
   "Nested Structure" => {
-    users: Array.new(50) { |i|
+    users: Array.new(50) do |i|
       {
         id: i,
         name: "User#{i}",
         age: 20 + i,
         city: "City#{i % 10}"
       }
-    },
+    end,
     metadata: {
       total: 50,
       page: 1,
@@ -70,7 +70,7 @@ datasets.each do |name, data|
 end
 
 # Test validation overhead with different complexities
-puts "\n" + "=" * 80
+puts "\n#{"=" * 80}"
 puts "Validation Overhead Analysis"
 puts "=" * 80
 puts
@@ -83,9 +83,9 @@ puts "Dataset Size | Strict (ms) | Lenient (ms) | Overhead (%)"
 puts "-" * 80
 
 test_sizes.each do |size|
-  data = Array.new(size) { |i|
+  data = Array.new(size) do |i|
     { id: i, name: "User#{i}", email: "user#{i}@example.com", score: rand(100) }
-  }
+  end
 
   toon_str = ToonFormat.encode(data)
 

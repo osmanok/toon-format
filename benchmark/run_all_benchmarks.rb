@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "English"
 require "fileutils"
 require "time"
 
@@ -58,7 +59,7 @@ benchmarks.each_with_index do |(file, description), index|
   begin
     # Run the benchmark
     system("ruby #{benchmark_path}")
-    status = $?.success? ? "✓ SUCCESS" : "✗ FAILED"
+    status = $CHILD_STATUS.success? ? "✓ SUCCESS" : "✗ FAILED"
     elapsed = Time.now - start_time
 
     results << {
@@ -97,7 +98,7 @@ failed = results.count { |r| r[:status] != "✓ SUCCESS" }
 
 summary = []
 summary << "TOON Format Benchmark Suite Results"
-summary << "=" * 80
+summary << ("=" * 80)
 summary << "Run Date: #{Time.now}"
 summary << "Total Time: #{total_time.round(2)}s"
 summary << "Total Benchmarks: #{results.size}"
@@ -105,7 +106,7 @@ summary << "Successful: #{successful}"
 summary << "Failed: #{failed}"
 summary << ""
 summary << "Individual Results:"
-summary << "-" * 80
+summary << ("-" * 80)
 
 results.each_with_index do |result, index|
   line = "#{index + 1}. #{result[:description]}"
@@ -113,13 +114,11 @@ results.each_with_index do |result, index|
   line += "#{result[:status]} (#{result[:elapsed].round(2)}s)"
   summary << line
 
-  if result[:error]
-    summary << "   Error: #{result[:error]}"
-  end
+  summary << "   Error: #{result[:error]}" if result[:error]
 end
 
 summary << ""
-summary << "=" * 80
+summary << ("=" * 80)
 
 # Print summary
 summary.each { |line| puts line }
