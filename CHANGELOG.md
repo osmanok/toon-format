@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Enhanced Rails Integration**:
+  - MIME type registration for `:toon` format (`application/toon`)
+  - ActionController renderer support (`render toon: @data`)
+  - Collection rendering optimization for ActiveRecord::Relation and arrays
+  - `ToonFormat::Rails::CollectionHelpers` module for efficient collection rendering
+  - Automatic tabular format optimization for uniform collections
+  - Support for all `as_json` options (`:only`, `:except`, `:include`, `:methods`)
+  - Combined Rails and TOON encoding options in single call
+  - Proper Content-Type headers for TOON responses
+- **Enhanced ActiveRecord Integration**:
+  - Improved `to_toon` method with separated Rails and TOON options
+  - Better option handling for attribute filtering
+- **Test Coverage**:
+  - Comprehensive tests for collection rendering (19 new test cases)
+  - Enhanced Railtie integration tests
+  - 93.88% code coverage (128 total tests)
+
+### Changed
+- Railtie now conditionally registers features based on Rails component availability
+- ActiveRecord `to_toon` method now properly separates Rails options from TOON encoding options
+
 ## [0.1.0] - 2025-01-XX
 
 ### Added

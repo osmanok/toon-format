@@ -135,10 +135,91 @@ ToonFormat.decode(toon, strict: false)  # Skip validation
 
 ## 🚂 Rails Integration
 
-Auto-extends ActiveRecord:
+The gem provides seamless Rails integration with automatic MIME type registration, controller renderers, and ActiveRecord extensions.
+
+### ActiveRecord Extensions
+
+Auto-extends all ActiveRecord models with `to_toon` method:
 ```ruby
-user.to_toon(only: [:id, :name])
+# Single model
+user = User.find(1)
+user.to_toon  # => "id: 1\nname: Alice\nemail: alice@example.com"
+
+# With options (same as as_json)
+user.to_toon(only: [:id, :name])           # Only specific attributes
+user.to_toon(except: [:password_digest])   # Exclude attributes
+user.to_toon(include: :posts)              # Include associations
+
+# Combine with TOON encoding options
+user.to_toon(only: [:id, :name], delimiter: '|')
 ```
+
+### Controller Integration
+
+Automatic MIME type (`:toon`) and renderer registration:
+```ruby
+class UsersController < ApplicationController
+  def index
+    @users = User.all
+
+    respond_to do |format|
+      format.json { render json: @users }
+      format.toon { render toon: @users }  # 🎯 New!
+    end
+  end
+
+  def show
+    @user = User.find(params[:id])
+
+    # Direct rendering
+    render toon: @user
+
+    # With options
+    render toon: @user, only: [:id, :name, :email]
+
+    # Collections are automatically optimized
+    render toon: User.all  # Uses efficient tabular format!
+  end
+end
+```
+
+### Collection Rendering
+
+Efficiently render collections with automatic tabular optimization:
+```ruby
+# In controllers
+class ApiController < ApplicationController
+  def users
+    users = User.limit(100)
+
+    # Automatically uses tabular format for uniform data
+    render toon: users, only: [:id, :name, :email]
+    # => [100,]{id,name,email}:
+    #    1,Alice,alice@example.com
+    #    2,Bob,bob@example.com
+    #    ...
+  end
+end
+
+# Manual collection rendering (anywhere)
+users = User.all.to_a
+toon_data = ToonFormat::Rails::CollectionHelpers.render_collection(
+  users,
+  only: [:id, :name],
+  delimiter: '|'
+)
+```
+
+### Features
+
+- ✅ **MIME Type**: Automatic registration of `application/toon`
+- ✅ **Content-Type Headers**: Proper HTTP headers for TOON responses
+- ✅ **ActiveRecord Integration**: `to_toon` method on all models
+- ✅ **Controller Renderer**: `render toon:` support
+- ✅ **Collection Optimization**: Automatic tabular format for collections
+- ✅ **Option Support**: All `as_json` options (`:only`, `:except`, `:include`, etc.)
+- ✅ **TOON Options**: Delimiter, indent, length markers
+- ✅ **ActiveRecord::Relation**: Direct rendering without `.to_a`
 
 ## 🔧 CLI Tool
 
