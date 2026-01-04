@@ -22,12 +22,13 @@ module ToonFormat
     end
 
     def looks_like_root_object?
-      # If we have multiple lines and they all look like key-value pairs at the same indent level
-      return false if @lines.size < 2
+      # If the first non-empty line looks like a key-value pair or key-only, treat as root object
+      return false if @lines.empty?
 
-      @lines.all? do |line|
-        line.strip.empty? || line =~ KEY_VALUE_PATTERN || line =~ KEY_ONLY_PATTERN
-      end
+      first_line = @lines.find { |line| !line.strip.empty? }
+      return false unless first_line
+
+      first_line =~ KEY_VALUE_PATTERN || first_line =~ KEY_ONLY_PATTERN
     end
 
     def parse_root_object
