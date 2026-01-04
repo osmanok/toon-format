@@ -23,12 +23,10 @@ module ToonFormat
 
     def looks_like_root_object?
       # If the first non-empty line looks like a key-value pair or key-only, treat as root object
-      return false if @lines.empty?
-
       first_line = @lines.find { |line| !line.strip.empty? }
       return false unless first_line
 
-      first_line =~ KEY_VALUE_PATTERN || first_line =~ KEY_ONLY_PATTERN
+      !!(first_line =~ KEY_VALUE_PATTERN || first_line =~ KEY_ONLY_PATTERN)
     end
 
     def parse_root_object
@@ -75,10 +73,6 @@ module ToonFormat
 
     def advance
       @position += 1
-    end
-
-    def peek_line(offset = 1)
-      @lines[@position + offset]
     end
 
     TABULAR_ARRAY_PATTERN = /\A\s*\[(\d+),\]\{(.+)\}:/
