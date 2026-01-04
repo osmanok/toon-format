@@ -88,9 +88,7 @@ RSpec.describe "Round-trip conversion" do
       expect(decoded).to eq(original)
     end
 
-    # NOTE: Complex nested structures with arrays inside objects need more parser work
-    # This is a known limitation - marking as pending until parser is enhanced
-    it "preserves complex nested structures", :pending do
+    it "preserves complex nested structures" do
       original = {
         users: [
           { id: 1, name: "Alice" },
